@@ -96,3 +96,9 @@ LikedItem
 - Create a migration
 - Run it
 - Inspect the migrations table
+
+### Set Git Head to previous commit
+
+```shell
+git reset --hard HEAD~1
+```
