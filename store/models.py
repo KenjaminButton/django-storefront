@@ -1,6 +1,14 @@
 from django.db import models
 
-# Create your models here.
+# ONE TO MANY FIELDS
+# Collection - Product
+# Customer - Order
+# Order - Item
+# Cart - Item
+
+
+class Collection(models.Model):
+    title = models.CharField(max_length=253)
 
 
 class Product(models.Model):
@@ -16,6 +24,39 @@ class Product(models.Model):
     inventory = models.IntegerField()
     # Automatically updates the current date time in the field
     last_update = models.DateTimeField(auto_now=True)
+
+    # One to Many relationship between Collection and Product
+
+    collection = models.ForeignKey(
+        # PROTECT so if we delete a collection, we don't accidently delete ALL the products in that collection
+        Collection, on_delete=models.PROTECT
+    )
+
+
+class Order(models.Model):
+    # Pending, Complete, Failed payment
+    PAYMENT_STATUS_PENDING = 'P'
+    PAYMENT_STATUS_COMPLETE = 'C'
+    PAYMENT_STATUS_FAILED = 'F'
+
+    # FIXED LIST of values for uppercase
+    PAYMENT_STATUS_CHOICES = [
+        (PAYMENT_STATUS_PENDING, 'Pending'),
+        (PAYMENT_STATUS_COMPLETE, 'Complete'),
+        (PAYMENT_STATUS_FAILED, 'Failed'),
+    ]
+    payment = models.CharField(
+        max_length=1, choices=PAYMENT_STATUS_CHOICES, default=PAYMENT_STATUS_PENDING)
+
+    # The auto_now_add option sets the field value to the current date and time during object creation only, while auto_now updates the field value to the current date and time on each object save or modification.
+    placed_at = models.DateTimeField(auto_now_add=True)
+
+    # One to Many relationship between Customer and Order
+    customer = models.ForeignKey(
+        # If we delete a customer, we don't accidentally delete an order
+        # String type 'Customer' because Customer class is defined AFTER Order class and I'm too lazy to move my classes around.
+        'Customer', on_delete=models.PROTECT
+    )
 
 
 class Customer(models.Model):
@@ -41,25 +82,6 @@ class Customer(models.Model):
         max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE)
 
 
-class Order(models.Model):
-    # Pending, Complete, Failed payment
-    PAYMENT_STATUS_PENDING = 'P'
-    PAYMENT_STATUS_COMPLETE = 'C'
-    PAYMENT_STATUS_FAILED = 'F'
-
-    # FIXED LIST of values for uppercase
-    PAYMENT_STATUS_CHOICES = [
-        (PAYMENT_STATUS_PENDING, 'Pending'),
-        (PAYMENT_STATUS_COMPLETE, 'Complete'),
-        (PAYMENT_STATUS_FAILED, 'Failed'),
-    ]
-    payment = models.CharField(
-        max_length=1, choices=PAYMENT_STATUS_CHOICES, default=PAYMENT_STATUS_PENDING)
-
-    # The auto_now_add option sets the field value to the current date and time during object creation only, while auto_now updates the field value to the current date and time on each object save or modification.
-    placed_at = models.DateTimeField(auto_now_add=True)
-
-
 class Address(models.Model):
     street = models.CharField(max_length=253)
     city = models.CharField(max_length=253)
@@ -70,4 +92,14 @@ class Address(models.Model):
 
     # One to Many relationship with Customer to Address
     customer = models.ForeignKey(
-        Customer, on_delete=models.CASCADE)
+        Customer, on_delete=models.CASCADE
+    )
+
+
+class Cart(models.Model):
+    pass
+
+
+class Item(models.Model):
+    # One to Many relationship between Cart and Item
+    pass
