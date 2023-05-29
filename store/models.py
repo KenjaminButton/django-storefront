@@ -39,3 +39,29 @@ class Customer(models.Model):
     birth_date = models.DateField(null=True)
     membership = models.CharField(
         max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE)
+
+
+class Order(models.Model):
+    # Pending, Complete, Failed payment
+    PAYMENT_STATUS_PENDING = 'P'
+    PAYMENT_STATUS_COMPLETE = 'C'
+    PAYMENT_STATUS_FAILED = 'F'
+
+    # FIXED LIST of values for uppercase
+    PAYMENT_STATUS_CHOICES = [
+        (PAYMENT_STATUS_PENDING, 'Pending'),
+        (PAYMENT_STATUS_COMPLETE, 'Complete'),
+        (PAYMENT_STATUS_FAILED, 'Failed'),
+    ]
+    payment = models.CharField(
+        max_length=1, choices=PAYMENT_STATUS_CHOICES, default=PAYMENT_STATUS_PENDING)
+
+    # The auto_now_add option sets the field value to the current date and time during object creation only, while auto_now updates the field value to the current date and time on each object save or modification.
+    placed_at = models.DateTimeField(auto_now_add=True)
+
+
+class Address(models.Model):
+    street = models.CharField(max_length=253)
+    city = models.CharField(max_length=253)
+    customer = models.OneToOneField(
+        Customer, on_delete=models.CASCADE, primary_key=True)
