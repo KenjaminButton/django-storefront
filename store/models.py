@@ -11,6 +11,13 @@ class Collection(models.Model):
     title = models.CharField(max_length=253)
 
 
+class OrderItem(models.Model):
+    order = models.ForeignKey('Order', on_delete=models.PROTECT)
+    product = models.ForeignKey('Product', on_delete=models.PROTECT)
+    quantity = models.PositiveSmallIntegerField()
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2)
+
+
 class Product(models.Model):
     # Hypothetical field without ID using SKU below:
     # sku = models.CharField(max_length=10, primary_key=True)
@@ -97,9 +104,11 @@ class Address(models.Model):
 
 
 class Cart(models.Model):
-    pass
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
-class Item(models.Model):
+class CartItem(models.Model):
     # One to Many relationship between Cart and Item
-    pass
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveSmallIntegerField()
