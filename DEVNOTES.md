@@ -27,6 +27,57 @@ django-admin runserver
 python manage.py runserver
 ```
 
+# Django Debug Toolbar Installation Instructions
+
+[Django Debug Toolbar Installation Process](https://django-debug-toolbar.readthedocs.io/en/latest/installation.html)
+
+1. Python vs Virtual ENV:
+
+```shell
+$ python -m pip install django-debug-toolbar
+# vs
+$ pipenv install django-debug-toolbar
 ```
 
+2. Settings module add app
+
+```python
+# storefront/settings.py
+INSTALLED_APPS = [
+...
+    'playground',
+    'debug_toolbar',
+]
+```
+
+3. Setting up URLconf
+
+```python
+# storefront/urls.py
+import debug_toolbar
+
+urlpatterns = [
+  ...
+  path('__debug__/', include(debug_toolbar.urls))
+]
+```
+
+4. Add the Middleware
+
+```python
+# storefront/settings.py
+MIDDLEWARE = [
+  'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+```
+
+5. Configure Internal IPs
+
+```python
+# storefront/settings.py
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
 ```
