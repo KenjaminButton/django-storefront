@@ -19,6 +19,17 @@ class Product(models.Model):
 
 
 class Customer(models.Model):
+    # Bronze, Silver, Gold membership
+    MEMBERSHIP_BRONZE = 'B'
+    MEMBERSHIP_SILVER = 'S'
+    MEMBERSHIP_GOLD = 'G'
+
+    # FIXED LIST OF VALUES for uppercase
+    MEMBERSHIP_CHOICES = [
+        (MEMBERSHIP_BRONZE, 'Bronze'),
+        (MEMBERSHIP_SILVER, 'Silver'),
+        (MEMBERSHIP_GOLD, 'Gold'),
+    ]
     # Django field types
     # https://docs.djangoproject.com/en/4.2/ref/models/fields/
     first_name = models.CharField(max_length=253)
@@ -26,3 +37,5 @@ class Customer(models.Model):
     email = models.EmailField(max_length=253, unique=True)
     phone = models.CharField(max_length=253)
     birth_date = models.DateField(null=True)
+    membership = models.CharField(
+        max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE)
