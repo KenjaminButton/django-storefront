@@ -1,11 +1,3 @@
-'''
-### JIRA Ticket
-App: likes
-  LikedItem
-    - what user likes what object
-    - user: ForeignKey to User (django.contrib.auth.models)
-'''
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
@@ -17,3 +9,12 @@ class LikedItem(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey()
+
+
+'''
+### JIRA Ticket
+App: likes
+  LikedItem
+    - what user likes what object
+    - user: ForeignKey to User (django.contrib.auth.models)
+'''
