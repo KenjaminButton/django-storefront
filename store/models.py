@@ -1,5 +1,13 @@
 from django.db import models
 
+# Define Many to Many relationships between Promotion and Product
+
+
+class Promotion(models.Model):
+    description = models.CharField(max_length=253)
+    discount = models.FloatField()
+    # products
+
 # ONE TO MANY FIELDS
 # Collection - Product
 # Customer - Order
@@ -31,13 +39,12 @@ class Product(models.Model):
     inventory = models.IntegerField()
     # Automatically updates the current date time in the field
     last_update = models.DateTimeField(auto_now=True)
-
     # One to Many relationship between Collection and Product
-
     collection = models.ForeignKey(
         # PROTECT so if we delete a collection, we don't accidently delete ALL the products in that collection
         Collection, on_delete=models.PROTECT
     )
+    promotions = models.ManyToManyField(Promotion)
 
 
 class Order(models.Model):
