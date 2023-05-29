@@ -81,3 +81,11 @@ INTERNAL_IPS = [
     # ...
 ]
 ```
+
+### JIRA Ticket
+
+App: likes
+LikedItem
+
+- what user likes what object
+- user: ForeignKey to User (django.contrib.auth.models)
