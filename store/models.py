@@ -35,6 +35,8 @@ class Product(models.Model):
     # Django field types
     # https://docs.djangoproject.com/en/4.2/ref/models/fields/
     title = models.CharField(max_length=253)
+    # slug: search engine optimization technique to deal with spaces
+    slug = models.SlugField()
     description = models.TextField()
     # $9999.99 maximum value or less...
     unit_price = models.DecimalField(max_digits=6, decimal_places=2)
