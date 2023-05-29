@@ -9,7 +9,4 @@ from django.http import HttpResponse
 
 
 def say_hello(request):
-    # Pull data from DB
-    # Transform data
-    # Send email
-    return HttpResponse('Hello Taiwan!')
+    return render(request, 'hello.html', {'name': 'Kenjamin'})
