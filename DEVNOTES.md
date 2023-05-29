@@ -89,3 +89,10 @@ LikedItem
 
 - what user likes what object
 - user: ForeignKey to User (django.contrib.auth.models)
+
+### JIRA Ticket
+
+- Add zip code to Address
+- Create a migration
+- Run it
+- Inspect the migrations table

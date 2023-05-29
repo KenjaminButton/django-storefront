@@ -98,6 +98,7 @@ class Customer(models.Model):
     birth_date = models.DateField(null=True)
     membership = models.CharField(
         max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE)
+    # https://docs.djangoproject.com/en/4.2/ref/models/options/
 
 
 class Address(models.Model):
@@ -112,6 +113,7 @@ class Address(models.Model):
     customer = models.ForeignKey(
         Customer, on_delete=models.CASCADE
     )
+    zip = models.CharField(max_length=10)
 
 
 class Cart(models.Model):
