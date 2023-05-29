@@ -63,5 +63,11 @@ class Order(models.Model):
 class Address(models.Model):
     street = models.CharField(max_length=253)
     city = models.CharField(max_length=253)
-    customer = models.OneToOneField(
-        Customer, on_delete=models.CASCADE, primary_key=True)
+
+    # One to One relationship with Customer and Address
+    # customer = models.OneToOneField(
+    #     Customer, on_delete=models.CASCADE, primary_key=True)
+
+    # One to Many relationship with Customer to Address
+    customer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE)
