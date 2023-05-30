@@ -96,3 +96,9 @@ LikedItem
 - Create a migration
 - Run it
 - Inspect the migrations table
+
+[MySQL Community Server Download](https://dev.mysql.com/downloads/mysql/)
+
+[DataGrip by Jet Brains](https://www.jetbrains.com/datagrip/download/#section=mac)
+
+[Generating Dummy Data](https://mockaroo.com/)
