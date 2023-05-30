@@ -102,3 +102,9 @@ LikedItem
 [DataGrip by Jet Brains](https://www.jetbrains.com/datagrip/download/#section=mac)
 
 [Generating Dummy Data](https://mockaroo.com/)
+
+### Set Git Head to previous commit
+
+```shell
+git reset --hard HEAD~1
+```
