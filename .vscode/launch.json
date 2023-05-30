@@ -13,8 +13,7 @@
         "runserver",
         "9000"
       ],
-      "django": true,
-      "justMyCode": true
+      "django": true
     }
   ]
 }
