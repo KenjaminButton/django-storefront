@@ -1,13 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-
-
-def calculate():
-    x = 1
-    y = 2
-    return x
+from django.db import transaction, connection
+from store.models import Product, Customer, Collection, Order, OrderItem, Cart, CartItem
+from tags.models import TaggedItem
 
 
 def say_hello(request):
-    x = calculate()
-    return render(request, 'hello.html', {'name': 'Mosh'})
+    with connection.cursor() as cursor:
+        cursor.execute()
+
+    return render(request, 'hello.html', {'name': 'Kenderson'})
