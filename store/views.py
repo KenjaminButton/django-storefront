@@ -7,21 +7,17 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin
+from rest_framework.viewset import ModelViewSet
 from .models import Product, Collection
 from .serializers import ProductSerializer, CollectionSerializer
 
 
-class ProductList(ListCreateAPIView):
-    queryset = Product.objects.select_related('collection').all()
+class ProductViewSet(ModelViewSet):
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
     def get_serializer_context(self):
         return {'request': self.request}
-
-
-class ProductDetail(RetrieveUpdateDestroyAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
 
     def delete(self, request, pk):
         product = get_object_or_404(Product, pk=pk)
@@ -31,7 +27,7 @@ class ProductDetail(RetrieveUpdateDestroyAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class CollectionDetail(RetrieveUpdateDestroyAPIView):
+class CollectionViewSet(ModelViewSet):
     queryset = Collection.objects.annotate(
         products_count=Count('products'))
     serializer_class = CollectionSerializer
@@ -43,8 +39,10 @@ class CollectionDetail(RetrieveUpdateDestroyAPIView):
         collection.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+# class CollectionDetail(RetrieveUpdateDestroyAPIView):
 
-class CollectionList(ListCreateAPIView):
-    queryset = Collection.objects.annotate(
-        products_count=Count('products')).all()
-    serializer_class = CollectionSerializer
+
+# class CollectionList(ListCreateAPIView):
+#     queryset = Collection.objects.annotate(
+#         products_count=Count('products')).all()
+#     serializer_class = CollectionSerializer
