@@ -18,8 +18,7 @@ from django.urls import path, include
 import debug_toolbar
 
 admin.site.site_header = 'Storefront Admin'
-admin.site.site_title = 'WINIFER FER!'
-admin.site.index_title = 'Adminnnnnnn'
+admin.site.index_title = 'Admin'
 
 urlpatterns = [
     path('admin/', admin.site.urls),

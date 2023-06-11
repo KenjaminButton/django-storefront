@@ -1,36 +1,9 @@
-from typing import Any, List, Optional, Tuple
 from django.contrib import admin, messages
+from django.db.models.aggregates import Count
 from django.db.models.query import QuerySet
-from django.http.request import HttpRequest
-from django.db.models import Count
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
 from . import models
-
-
-@admin.register(models.Collection)
-class CollectionAdmin(admin.ModelAdmin):
-    list_display = ['title', 'products_count']
-    autocomplete_fields = ['featured_product']
-    search_fields = ['title']
-
-    @admin.display(ordering='products_count')
-    def products_count(self, collection):
-        # reverse('admin:app_model_page') is the template for below
-        url = (
-            reverse('admin:store_product_changelist')
-            + '?'
-            + urlencode({
-              'collection__id': str(collection.id)
-            })
-        )
-        return format_html('<a href="{}">{}</a>',
-                           url, collection.products_count)
-
-    def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
-        return super().get_queryset(request).annotate(
-            products_count=Count('products')
-        )
 
 
 class InventoryFilter(admin.SimpleListFilter):
@@ -54,13 +27,13 @@ class ProductAdmin(admin.ModelAdmin):
         'slug': ['title']
     }
     actions = ['clear_inventory']
-    search_fields = ['title']
     list_display = ['title', 'unit_price',
                     'inventory_status', 'collection_title']
     list_editable = ['unit_price']
     list_filter = ['collection', 'last_update', InventoryFilter]
     list_per_page = 10
     list_select_related = ['collection']
+    search_fields = ['title']
 
     def collection_title(self, product):
         return product.collection.title
@@ -76,14 +49,36 @@ class ProductAdmin(admin.ModelAdmin):
         updated_count = queryset.update(inventory=0)
         self.message_user(
             request,
-            f'{updated_count} products were successfully updated',
+            f'{updated_count} products were successfully updated.',
             messages.ERROR
+        )
+
+
+@admin.register(models.Collection)
+class CollectionAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['featured_product']
+    list_display = ['title', 'products_count']
+    search_fields = ['title']
+
+    @admin.display(ordering='products_count')
+    def products_count(self, collection):
+        url = (
+            reverse('admin:store_product_changelist')
+            + '?'
+            + urlencode({
+                'collection__id': str(collection.id)
+            }))
+        return format_html('<a href="{}">{} Products</a>', url, collection.products_count)
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(
+            products_count=Count('product')
         )
 
 
 @admin.register(models.Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ['first_name', 'last_name', 'membership', 'orders']
+    list_display = ['first_name', 'last_name',  'membership', 'orders']
     list_editable = ['membership']
     list_per_page = 10
     ordering = ['first_name', 'last_name']
@@ -95,12 +90,9 @@ class CustomerAdmin(admin.ModelAdmin):
             reverse('admin:store_order_changelist')
             + '?'
             + urlencode({
-              'customer__id': str(customer.id)
-            })
-        )
-        return format_html(
-            '<a href="{}">{} Orders</a>', url, customer.orders_count
-        )
+                'customer__id': str(customer.id)
+            }))
+        return format_html('<a href="{}">{} Orders</a>', url, customer.orders_count)
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate(
@@ -108,7 +100,7 @@ class CustomerAdmin(admin.ModelAdmin):
         )
 
 
-class OrderItemInline(admin.StackedInline):
+class OrderItemInline(admin.TabularInline):
     autocomplete_fields = ['product']
     min_num = 1
     max_num = 10
